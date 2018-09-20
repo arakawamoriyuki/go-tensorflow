@@ -10,68 +10,30 @@
 
 TensorFlow Go APIは動作保証してない！
 
-## 環境
-
-全て最新では動かなかったorz
+## ENV
 
 ```
-# 環境
 $ sw_vers
 ProductName: Mac OS X
 ProductVersion:	10.12.6
 BuildVersion: 16G29
+
 $ go version
 go version go1.11 darwin/amd64
-$ python --version
-Python 3.5.2 :: Anaconda 4.2.0 (x86_64)
-$ conda list | grep tensorflow
-tensorflow 1.10.0 py35_0 conda-forge
-
-# Goで利用する為にTensorFlow C ライブラリをインストール
-$ TF_TYPE='cpu'
-$ TARGET_DIRECTORY='/usr/local'
-$ curl -L "https://storage.googleapis.com/tensorflow/libtensorflow/libtensorflow-${TF_TYPE}-$(go env GOOS)-x86_64-1.10.1.tar.gz" | sudo tar -C $TARGET_DIRECTORY -xz
-$ ls $TARGET_DIRECTORY/lib | grep libtensorflow.so
-
-# tensorflow/goパッケージダウンロード
-$ go get github.com/tensorflow/tensorflow/tensorflow/go
-$ go test github.com/tensorflow/tensorflow/tensorflow/go
-...エラーもなにも吐かずgo testずっと実行中
 ```
 
-結構古いけど辛くも動作した `python tensorflow v1.4.0` `go tensorflow v1.4.0`
+## Install TensorFlow for Go
 
 ```
-# 環境
-$ sw_vers
-ProductName: Mac OS X
-ProductVersion:	10.12.6
-BuildVersion: 16G29
-$ goenv install 1.11
-$ goenv global 1.11
-$ go version
-go version go1.11 darwin/amd64
-$ pyenv install anaconda3-4.2.0
-$ pyenv global anaconda3-4.2.0
-$ python --version
-Python 3.5.2 :: Anaconda 4.2.0 (x86_64)
-$ conda install -y -c conda-forge tensorflow==1.4.0
-$ conda list | grep tensorflow
-tensorflow 1.4.0 py35_0 conda-forge
-$ python
->>> import tensorflow as tf
->>> tf.__version__
-'1.4.0'
-
 # Goで利用する為にTensorFlow C ライブラリをインストール
 $ TF_TYPE='cpu'
 $ TARGET_DIRECTORY='/usr/local'
 $ curl -L "https://storage.googleapis.com/tensorflow/libtensorflow/libtensorflow-${TF_TYPE}-$(go env GOOS)-x86_64-1.10.1.tar.gz" | sudo tar -C $TARGET_DIRECTORY -xz
 
-# Modulesを利用してv1.4.0をgo get
+# Modulesを利用してv1.10.1をgo get
 $ export GO111MODULE=on
 $ go mod init
-$ go get github.com/tensorflow/tensorflow/tensorflow/go@v1.4.0
+$ go get github.com/tensorflow/tensorflow/tensorflow/go@v1.10.1
 $ go test github.com/tensorflow/tensorflow/tensorflow/go
 ok github.com/tensorflow/tensorflow/tensorflow/go 0.345s
 
@@ -80,6 +42,25 @@ $ go run src/main/main.go
 2018-09-19 21:31:21.055739: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.2 AVX AVX2 FMA
 Hello from TensorFlow version 1.10.1
 ```
+
+
+## Tensorflow Tutorials Image Recognition
+
+学習済みモデルinception-v3を使って画像分類をGoで
+
+[Tensorflow Tutorials Image Recognition](https://www.tensorflow.org/tutorials/images/image_recognition)
+
+TODO:
+
+
+### バイナリにしてみる
+
+TODO:
+
+
+### 画像仕分けしてみる
+
+TODO:
 
 
 ## Dockerでやるなら
@@ -94,6 +75,14 @@ Hello from TensorFlow version 1.10.1
 
 ```
 $ git clone https://github.com/tinrab/go-tensorflow-image-recognition
+
+# 環境がほしいなら
 $ cd go-tensorflow-image-recognition/api
 $ docker build -t tensorflow-go .
+$ docker run -it --rm tensorflow-go /bin/bash
+
+# Image Recognitionを試したいなら
+$ cd go-tensorflow-image-recognition
+$ docker-compose -f docker-compose.yaml up -d --build
+$ curl localhost:8080/recognize -F 'image=@./cat.jpg'
 ```
