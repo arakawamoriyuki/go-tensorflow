@@ -22,16 +22,16 @@ var modelFile ModelFile = ModelFile {
 	Path: "tensorflow_inception_graph.pb",
 }
 
-func ModelZipExists() bool {
-	return FileExists(modelFile.UnzipPath + modelFile.ZipPath)
+func modelZipExists() bool {
+	return fileExists(modelFile.UnzipPath + modelFile.ZipPath)
 }
 
-func ModelExists() bool {
-	return FileExists(modelFile.UnzipPath + modelFile.LabelPath) &&
-		FileExists(modelFile.Path)
+func modelExists() bool {
+	return fileExists(modelFile.UnzipPath + modelFile.LabelPath) &&
+		fileExists(modelFile.Path)
 }
 
-func DownloadModelZip() error {
+func downloadModelZip() error {
 	response, err := http.Get(modelFile.DownloadUrl)
 	if err != nil {
 		return err
@@ -49,16 +49,16 @@ func DownloadModelZip() error {
 }
 
 func SetUp() error {
-	modelExists := ModelExists()
+	modelExists := modelExists()
 	if modelExists == false {
-		modelZipExists := ModelZipExists()
+		modelZipExists := modelZipExists()
 		if modelZipExists == false {
-			err := DownloadModelZip()
+			err := downloadModelZip()
 			if err != nil {
 				return err
 			}
 		}
-		err := Unzip(modelFile.ZipPath, modelFile.UnzipPath)
+		err := unzip(modelFile.ZipPath, modelFile.UnzipPath)
 		if err != nil {
 			return err
 		}
