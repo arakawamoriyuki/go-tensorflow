@@ -5,15 +5,17 @@ func SetUp() error {
 	if modelExists == false {
 		modelZipExists := modelZipExists()
 		if modelZipExists == false {
-			err := downloadModelZip()
-			if err != nil {
+			if err := downloadModelZip(); err != nil {
 				return err
 			}
 		}
-		err := unzip(modelFile.ZipPath, modelFile.UnzipPath)
-		if err != nil {
+		if err := unzip(modelFile.ZipFilePath, modelFile.UnzipDestPath); err != nil {
 			return err
 		}
+	}
+
+	if err := loadModel(); err != nil {
+		return err
 	}
 
 	return nil
