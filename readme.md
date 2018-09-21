@@ -38,7 +38,7 @@ $ go test github.com/tensorflow/tensorflow/tensorflow/go
 ok github.com/tensorflow/tensorflow/tensorflow/go 0.345s
 
 # 動作確認
-$ go run src/main/main.go
+$ go run src/hello_tensorflow/main.go
 2018-09-19 21:31:21.055739: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.2 AVX AVX2 FMA
 Hello from TensorFlow version 1.10.1
 ```
