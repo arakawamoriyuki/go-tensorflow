@@ -3,11 +3,8 @@ package inception
 import (
 	"os"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"bufio"
-
-	tf "github.com/tensorflow/tensorflow/tensorflow/go"
 )
 
 type ModelFile struct {
@@ -34,11 +31,7 @@ var modelFile ModelFile = ModelFile {
 	ModelFileName: "tensorflow_inception_graph.pb",
 }
 
-var (
-	graphModel   *tf.Graph
-	sessionModel *tf.Session
-	labels       []string
-)
+var labels []string
 
 func modelZipExists() bool {
 	return fileExists(modelFile.ZipFilePath)
@@ -66,22 +59,7 @@ func downloadModelZip() error {
 	return nil
 }
 
-func loadModel() error {
-	model, err := ioutil.ReadFile(modelFile.GetModelFilePath())
-	if err != nil {
-		return err
-	}
-
-	graphModel = tf.NewGraph()
-	if err := graphModel.Import(model, ""); err != nil {
-		return err
-	}
-
-	sessionModel, err = tf.NewSession(graphModel, nil)
-	if err != nil {
-		return err
-	}
-
+func loadLabelFile() error {
 	labelsFile, err := os.Open(modelFile.GetLabelFilePath())
 	if err != nil {
 		return err

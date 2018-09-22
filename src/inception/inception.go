@@ -14,9 +14,15 @@ func SetUp() error {
 		}
 	}
 
-	if err := loadModel(); err != nil {
+	if err := loadLabelFile(); err != nil {
+		return err
+	}
+
+	if err := startSession(); err != nil {
 		return err
 	}
 
 	return nil
 }
+
+
