@@ -57,8 +57,15 @@ $ go run src/main/main.go /path/to/cat.jpg
 
 ### バイナリにしてみる
 
-TODO:
-
+```
+$ go build -o classify-image src/main/main.go
+$ ./classify-image cat.jpg
+tabby) 0.696252
+Egyptian cat) 0.220438
+tiger cat) 0.067047
+lynx) 0.012824
+cougar) 0.002465
+```
 
 ### 画像仕分けしてみる
 

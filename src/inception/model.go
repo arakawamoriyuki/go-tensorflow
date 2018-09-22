@@ -82,7 +82,7 @@ func downloadModelZip() error {
 	}
 	defer response.Body.Close()
 
-	file, err := os.Create(modelFile.UnzipDestPath)
+	file, err := os.Create(modelFile.ZipFilePath)
 	if err != nil {
 		return err
 	}
