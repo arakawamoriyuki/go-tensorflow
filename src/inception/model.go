@@ -5,7 +5,40 @@ import (
 	"io"
 	"net/http"
 	"bufio"
+	"sort"
+	"fmt"
 )
+
+type LabelResult struct {
+	Label string `json:"label"`
+	Probability float32 `json:"probability"`
+}
+
+func (labelResult LabelResult) String() string {
+	return fmt.Sprintf("%s) %f", labelResult.Label, labelResult.Probability)
+}
+
+type LabelResults []LabelResult
+
+func (labelResults LabelResults) String() string {
+	var text string
+	for _, labelResult := range labelResults {
+		text += fmt.Sprintln(labelResult.String())
+	}
+	return text
+}
+
+func (labelResults LabelResults) Len() int {
+	return len(labelResults)
+}
+
+func (labelResults LabelResults) Swap(i, j int) {
+	labelResults[i], labelResults[j] = labelResults[j], labelResults[i]
+}
+
+func (labelResults LabelResults) Less(i, j int) bool {
+	return labelResults[i].Probability > labelResults[j].Probability
+}
 
 type ModelFile struct {
 	DownloadUrl string
@@ -74,4 +107,17 @@ func loadLabelFile() error {
 		return err
 	}
 	return nil
+}
+
+func findBestLabels(probabilities []float32) []LabelResult {
+	var resultLabels []LabelResult
+	for i, p := range probabilities {
+		if i >= len(labels) {
+			break
+		}
+		resultLabels = append(resultLabels, LabelResult{Label: labels[i], Probability: p})
+	}
+	sort.Sort(LabelResults(resultLabels))
+	// Return top 5 labels
+	return resultLabels[:5]
 }

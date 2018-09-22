@@ -50,8 +50,10 @@ Hello from TensorFlow version 1.10.1
 
 [Tensorflow Tutorials Image Recognition](https://www.tensorflow.org/tutorials/images/image_recognition)
 
-TODO:
-
+```
+$ go get github.com/arakawamoriyuki/go-tensorflow
+$ go run src/main/main.go /path/to/cat.jpg
+```
 
 ### バイナリにしてみる
 
